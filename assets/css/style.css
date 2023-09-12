@@ -47,6 +47,7 @@ h6 {
 
 h2 {
     margin-bottom: 2rem;
+    font-size: 4rem;
 }
 
 header {
@@ -69,6 +70,7 @@ section {
 
 button {
     width: fit-content;
+    min-height: 100%;
     padding: 0.5rem;
     font-size: 2rem;
 }
@@ -78,11 +80,16 @@ p {
 }
 
 input[type='text'] {
-    height: 4rem;
     width: 25rem;
-    margin: 1rem 0;
+    margin: 0 1rem;
     padding: 1rem;
     font-size: 2rem;
+}
+
+form {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
 }
 
 .hidden {
@@ -106,14 +113,19 @@ input[type='text'] {
 }
 
 #highscores {
-    padding-top: 10rem;
+    padding-top: 5rem;
     display: flex;
     row-gap: 2rem;
     column-gap: 2rem;
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
-#highscores button {
-    width: 40%;
-}
+#scoreboard {
+    flex: 0 0 100%;
+    display: flex;
+    row-gap: 1rem;
+    text-align: center;
+} 
+

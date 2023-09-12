@@ -2,13 +2,11 @@ var startButt = document.getElementById("start");
 var timeSpan = document.getElementById("countdown-time");
 var main = document.getElementById("main");
 var mainSec = document.getElementById("main-section");
-var isIngame = false;
 var time;
 var timer;
 var currentQues = 0;
 
 const question1 = {
-    id: 1,
     question: "Commonly used data types DO NOT include:",
     answer: ["1. strings", "2. booleans", "3. alerts", "4. number"],
     right: function () {
@@ -17,7 +15,6 @@ const question1 = {
 }
 
 const question2 = {
-    id: 2,
     question: "The condition in an if/else statement is enclosed within _____.",
     answer: ["1. quotes", "2. curly brackets", "3. parentheses", "4. square brackets"],
     right: function () {
@@ -26,7 +23,6 @@ const question2 = {
 }
 
 const question3 = {
-    id: 3,
     question: "Arrays in JavaScript can be used to store _____.",
     answer: ["1. numbers and strings", "2. other arrays", "3. booleans", "4. all of the above"],
     right: function () {
@@ -35,7 +31,6 @@ const question3 = {
 }
 
 const question4 = {
-    id: 4,
     question: "String values must be enclosed within _____ when being assigned to variables.",
     answer: ["1. commas", "2. curly brackets", "3. quotes", "4. parentheses"],
     right: function () {
@@ -44,7 +39,6 @@ const question4 = {
 }
 
 const question5 = {
-    id: 5,
     question: "A very useful tool used during development and debugging for printing content to the debugger is:",
     answer: ["1. JavaScript", "2. terminal/bash", "3. for loops", "4. console.log"],
     right: function () {
@@ -54,7 +48,7 @@ const question5 = {
 
 const questionPool = [question1, question2, question3, question4, question5];
 
-function startgame() {
+function startgame(event) {
     time = 50;
     isIngame = true;
     mainSec.setAttribute("class", "hidden");
@@ -64,12 +58,14 @@ function startgame() {
 
 function startTimer() {
     timer = setInterval(function() {
-        time--;
         timeSpan.textContent = time;
         if (time <= 0) {
             deleteContent();
             saveHighscores();
             clearInterval(timer);
+        }
+        else {
+            time--;
         }
     }, 1000);
 }
@@ -102,7 +98,6 @@ function displayResult(str) {
     setTimeout(()=> {
         notification.setAttribute("class", "hidden");
     }, 1500)
-    return notification;
 }
 
 function clickButton(event) {
@@ -110,8 +105,7 @@ function clickButton(event) {
     if (event.target.matches("button[class='answer']")) {
         deleteContent();  
         var choosen = event.target.textContent;
-        currentQues++; 
-        if (choosen != questionPool[currentQues-1].right()) {
+        if (choosen != questionPool[currentQues].right()) {
             if (time >= 10) {
                 time -= 10;
             } else {
@@ -122,6 +116,7 @@ function clickButton(event) {
         else {
             result = "Correct!"
         }
+        currentQues++; 
         // if there are still questions to render and time not finish, show question
         if (currentQues < questionPool.length && time > 0) {
             renderQuestion(questionPool[currentQues]);
@@ -134,9 +129,8 @@ function clickButton(event) {
         }
         displayResult(result);
     }
-    if (event.target.matches("button[class='name']")) {
+    if (event.target.matches("button[class='submit']")) {
         storeScores();
-        showHighscores();
     }
 }
 
@@ -146,30 +140,44 @@ function saveHighscores() {
     var text2 = document.createElement("p");
     text2.textContent = "Your final score is " + (time) + ".";
     var text3 = document.createElement("label");
+    var form = document.createElement("form")
     text3.textContent = "Enter initials: "
     var inputName = document.createElement("input");
     inputName.setAttribute("type", "text");
+    inputName.setAttribute("required", "");
     var submitName = document.createElement("button");
     submitName.textContent = "Submit";
-    submitName.setAttribute("class", "name")
-    var arr = [text1, text2, text3, inputName, submitName];
+    submitName.setAttribute("class", "submit")
+    form.appendChild(text3);
+    form.appendChild(inputName);
+    form.appendChild(submitName);
+    var arr = [text1, text2, form];
     for (var i=0; i<arr.length; i++) {
         main.appendChild(arr[i]);
     }
  }
 
 function storeScores() {
-    console.log(main.children[3]);
-    console.log(main.children[3].value);
-    var username = main.children[3].value.trim();
+    var username = main.children[2].children[1].value.trim();
+    console.log(username);
     if (username != "") {
+        deleteContent();
         username = username.toUpperCase();
-        var highscore = JSON.stringify({name: username, score: time}); 
-        localStorage.setItem("scores", highscore);
+        var highscore = {name: username, score: time}; 
+        var oldscores = localStorage.getItem("scores");
+        var allscores = [];
+        if (!oldscores) {
+            allscores.unshift(highscore);
+        } else {
+            var newscores = JSON.parse(oldscores)
+            newscores.unshift(highscore);
+            allscores = newscores;
+        }
+        localStorage.setItem("scores", JSON.stringify(allscores));  
+        showHighscores();
     } else {
         console.log("Must input your initials");
     }
-    deleteContent();
     mainSec.setAttribute("class", "show");
 }
 
@@ -179,3 +187,4 @@ function showHighscores() {
 
 startButt.addEventListener("click", startgame);
 main.addEventListener("click", clickButton);
+
