@@ -136,6 +136,7 @@ function clickButton(event) {
     }
     if (event.target.matches("button[class='name']")) {
         storeScores();
+        showHighscores();
     }
 }
 
@@ -158,15 +159,23 @@ function saveHighscores() {
  }
 
 function storeScores() {
-    console.log(main.children); 
-    
+    console.log(main.children[3]);
+    console.log(main.children[3].value);
+    var username = main.children[3].value.trim();
+    if (username != "") {
+        username = username.toUpperCase();
+        var highscore = JSON.stringify({name: username, score: time}); 
+        localStorage.setItem("scores", highscore);
+    } else {
+        console.log("Must input your initials");
+    }
+    deleteContent();
+    mainSec.setAttribute("class", "show");
 }
 
-function getstoredScores() {
-
+function showHighscores() {
+    window.location.href = 'highscore.html';
 }
-
-
 
 startButt.addEventListener("click", startgame);
 main.addEventListener("click", clickButton);

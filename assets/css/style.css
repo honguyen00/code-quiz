@@ -70,10 +70,19 @@ section {
 button {
     width: fit-content;
     padding: 0.5rem;
+    font-size: 2rem;
 }
 
 p {
     text-align: center;
+}
+
+input[type='text'] {
+    height: 4rem;
+    width: 25rem;
+    margin: 1rem 0;
+    padding: 1rem;
+    font-size: 2rem;
 }
 
 .hidden {
@@ -94,4 +103,17 @@ p {
     border-top: 1px solid var(--east-bay);
     font-style: oblique;
     color: var(--east-bay);
+}
+
+#highscores {
+    padding-top: 10rem;
+    display: flex;
+    row-gap: 2rem;
+    column-gap: 2rem;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+#highscores button {
+    width: 40%;
 }
