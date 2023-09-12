@@ -55,7 +55,7 @@ const question5 = {
 const questionPool = [question1, question2, question3, question4, question5];
 
 function startgame() {
-    time = 90;
+    time = 50;
     isIngame = true;
     mainSec.setAttribute("class", "hidden");
     renderQuestion(questionPool[currentQues]);
@@ -66,6 +66,10 @@ function startTimer() {
     timer = setInterval(function() {
         timeSpan.textContent = time;
         time--;
+        if (time < 0) {
+            saveHighscores();
+            clearInterval(timer);
+        }
     }, 1000);
 }
 
@@ -76,12 +80,12 @@ function renderQuestion(obj) {
     for (var i=0; i<obj.answer.length; i++) {
         var ansButt = document.createElement("button");
         ansButt.textContent = obj.answer[i];
-        ansButt.addEventListener("click", clickAnswer);
+        ansButt.setAttribute("class", "answer");
         main.appendChild(ansButt);
     }
 }
 
-function deleteQuestion() {
+function deleteContent() {
     var first = main.firstElementChild;
     while (first) {
         first.remove();
@@ -99,23 +103,82 @@ function displayResult(str) {
     }, 1000)
 }
 
-function clickAnswer(event) {
-    if (currentQues < questionPool.length) {
+// function clickButton(event) {
+//     if (event.target.matches("button[class='answer']")) {
+//         deleteContent();
+//         if (currentQues < questionPool.length-1) {
+//             var choosen = event.target.textContent;
+//             currentQues++;
+//             renderQuestion(questionPool[currentQues]);
+//         } else {
+//             clearInterval(timer);
+//         }
+//         if (choosen === questionPool[currentQues-1].right()) {
+//             displayResult("Correct!");
+//         } else {
+//             displayResult("Wrong!");
+//             time -= 10;
+//         }
+//     }
+// }
+
+function clickButton(event) {
+    if (event.target.matches("button[class='answer']")) {
+        deleteContent();  
         var choosen = event.target.textContent;
-        console.log(choosen);
-        deleteQuestion();
-        currentQues++;
-        renderQuestion(questionPool[currentQues]);
-    } else {
-        deleteQuestion();
+        currentQues++; 
+        // if there are still questions to render and time not finish, show question
+        if (currentQues < questionPool.length && time > 0) {
+            renderQuestion(questionPool[currentQues]);
+        }
+        // else no more question, finish game 
+        else {
+            clearInterval(timer);
+            saveHighscores();
+        }
+        if (choosen === questionPool[currentQues-1].right()) {
+            displayResult("Correct!");
+        } else {
+            displayResult("Wrong!");
+            if (time > 10) {
+                time -= 10;
+            } else {
+                time = 0;
+            }
+        }
     }
-    if (choosen === questionPool[currentQues-1].right()) {
-        displayResult("Correct!");
-    } else {
-        displayResult("Wrong!");
-        time -= 10;
+    if (event.target.matches("button[class='name']")) {
+        storeScores();
     }
 }
 
+function saveHighscores() {
+    var text1 = document.createElement("h2");
+    text1.textContent = "Challenge's over!";
+    var text2 = document.createElement("p");
+    text2.textContent = "Your final score is " + (time+1) + ".";
+    var text3 = document.createElement("label");
+    text3.textContent = "Enter initials: "
+    var inputName = document.createElement("input");
+    inputName.setAttribute("type", "text");
+    var submitName = document.createElement("button");
+    submitName.textContent = "Submit";
+    submitName.setAttribute("class", "name")
+    var arr = [text1, text2, text3, inputName, submitName];
+    for (var i=0; i<arr.length; i++) {
+        main.appendChild(arr[i]);
+    }
+ }
 
-startButt.addEventListener("click", startgame)
+function storeScores() {
+    console.log(main.children()); 
+}
+
+function getstoredScores() {
+
+}
+
+
+
+startButt.addEventListener("click", startgame);
+main.addEventListener("click", clickButton);
