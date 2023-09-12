@@ -64,9 +64,10 @@ function startgame() {
 
 function startTimer() {
     timer = setInterval(function() {
-        timeSpan.textContent = time;
         time--;
-        if (time < 0) {
+        timeSpan.textContent = time;
+        if (time <= 0) {
+            deleteContent();
             saveHighscores();
             clearInterval(timer);
         }
@@ -95,68 +96,54 @@ function deleteContent() {
 
 function displayResult(str) {
     var notification = document.createElement("div");
-    notification.textContent = str
+    notification.textContent = str;
     notification.setAttribute("class", "noti");
     main.appendChild(notification);
     setTimeout(()=> {
         notification.setAttribute("class", "hidden");
-    }, 1000)
+    }, 1500)
+    return notification;
 }
 
-// function clickButton(event) {
-//     if (event.target.matches("button[class='answer']")) {
-//         deleteContent();
-//         if (currentQues < questionPool.length-1) {
-//             var choosen = event.target.textContent;
-//             currentQues++;
-//             renderQuestion(questionPool[currentQues]);
-//         } else {
-//             clearInterval(timer);
-//         }
-//         if (choosen === questionPool[currentQues-1].right()) {
-//             displayResult("Correct!");
-//         } else {
-//             displayResult("Wrong!");
-//             time -= 10;
-//         }
-//     }
-// }
-
 function clickButton(event) {
+    var result;
     if (event.target.matches("button[class='answer']")) {
         deleteContent();  
         var choosen = event.target.textContent;
         currentQues++; 
-        // if there are still questions to render and time not finish, show question
-        if (currentQues < questionPool.length && time > 0) {
-            renderQuestion(questionPool[currentQues]);
-        }
-        // else no more question, finish game 
-        else {
-            clearInterval(timer);
-            saveHighscores();
-        }
-        if (choosen === questionPool[currentQues-1].right()) {
-            displayResult("Correct!");
-        } else {
-            displayResult("Wrong!");
-            if (time > 10) {
+        if (choosen != questionPool[currentQues-1].right()) {
+            if (time >= 10) {
                 time -= 10;
             } else {
                 time = 0;
             }
+            result = "Wrong!"
         }
+        else {
+            result = "Correct!"
+        }
+        // if there are still questions to render and time not finish, show question
+        if (currentQues < questionPool.length && time > 0) {
+            renderQuestion(questionPool[currentQues]);
+        }
+        // else no more question or time runs out, finish game 
+        else {
+            clearInterval(timer);
+            timeSpan.textContent = time;
+            saveHighscores();
+        }
+        displayResult(result);
     }
     if (event.target.matches("button[class='name']")) {
         storeScores();
     }
 }
 
-function saveHighscores() {
+function saveHighscores() { 
     var text1 = document.createElement("h2");
     text1.textContent = "Challenge's over!";
     var text2 = document.createElement("p");
-    text2.textContent = "Your final score is " + (time+1) + ".";
+    text2.textContent = "Your final score is " + (time) + ".";
     var text3 = document.createElement("label");
     text3.textContent = "Enter initials: "
     var inputName = document.createElement("input");
@@ -171,7 +158,8 @@ function saveHighscores() {
  }
 
 function storeScores() {
-    console.log(main.children()); 
+    console.log(main.children); 
+    
 }
 
 function getstoredScores() {
