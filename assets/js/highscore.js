@@ -38,7 +38,7 @@ init();
 
 // event listener
 returnButt.addEventListener("click", () => {
-    window.location.href = "index.html";
+    window.location.replace = "index.html";
 })
 
 clearButt.addEventListener("click", () => {
