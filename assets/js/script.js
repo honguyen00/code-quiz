@@ -6,6 +6,7 @@ var time;
 var timer;
 var currentQues = 0;
 
+// Declare all the questions and put them in an array called "questionPool"
 const question1 = {
     question: "Commonly used data types DO NOT include:",
     answer: ["1. strings", "2. booleans", "3. alerts", "4. number"],
@@ -48,14 +49,16 @@ const question5 = {
 
 const questionPool = [question1, question2, question3, question4, question5];
 
+// function for when the "start" button is clicked and begin game
 function startgame(event) {
-    time = 50;
+    time = 60;
     isIngame = true;
     mainSec.setAttribute("class", "hidden");
     renderQuestion(questionPool[currentQues]);
     startTimer()
 }
 
+// function for the timer
 function startTimer() {
     timer = setInterval(function() {
         timeSpan.textContent = time;
@@ -70,6 +73,7 @@ function startTimer() {
     }, 1000);
 }
 
+// function for displaying the question to the screen
 function renderQuestion(obj) {
     var quesEl = document.createElement("h2");
     quesEl.textContent = obj.question;
@@ -82,6 +86,7 @@ function renderQuestion(obj) {
     }
 }
 
+// function for deleting all child elements from main
 function deleteContent() {
     var first = main.firstElementChild;
     while (first) {
@@ -90,6 +95,7 @@ function deleteContent() {
     }
 }
 
+// function for displaying the result after an answer is chosen
 function displayResult(str) {
     var notification = document.createElement("div");
     notification.textContent = str;
@@ -100,9 +106,11 @@ function displayResult(str) {
     }, 1500)
 }
 
+// function for handling when a button is clicked
 function clickButton(event) {
-    var result;
+    // if the button is for chosing an answer
     if (event.target.matches("button[class='answer']")) {
+        var result;
         deleteContent();  
         var choosen = event.target.textContent;
         if (choosen != questionPool[currentQues].right()) {
@@ -129,11 +137,14 @@ function clickButton(event) {
         }
         displayResult(result);
     }
+    // if the button is for submiting score
     if (event.target.matches("button[class='submit']")) {
+        event.preventDefault();
         storeScores();
     }
 }
 
+// function for showing the form to store your score
 function saveHighscores() { 
     var text1 = document.createElement("h2");
     text1.textContent = "Challenge's over!";
@@ -157,6 +168,7 @@ function saveHighscores() {
     }
  }
 
+// function for when users submit their score with their initials
 function storeScores() {
     var username = main.children[2].children[1].value.trim();
     console.log(username);
@@ -176,15 +188,17 @@ function storeScores() {
         localStorage.setItem("scores", JSON.stringify(allscores));  
         showHighscores();
     } else {
-        console.log("Must input your initials");
+        window.alert("You must include your initials to save score!")
     }
     mainSec.setAttribute("class", "show");
 }
 
+// funtion for switching to scoreboard screen
 function showHighscores() {
     window.location.href = 'highscore.html';
 }
 
+// event listener
 startButt.addEventListener("click", startgame);
 main.addEventListener("click", clickButton);
 

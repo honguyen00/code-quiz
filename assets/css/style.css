@@ -50,17 +50,21 @@ h2 {
     font-size: 4rem;
 }
 
+/* header section */
+
 header {
     display: flex;
     justify-content: space-between;
     margin-bottom: 8rem;
 }
 
+/* main body */
 main {
     width: 40%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    row-gap: 1rem;
 }
 
 section {
@@ -68,17 +72,24 @@ section {
     row-gap: 2rem;
 }
 
+/* all buttons */
 button {
     width: fit-content;
     min-height: 100%;
     padding: 0.5rem;
     font-size: 2rem;
+    border-radius: 1rem;
+    background-color: var(--purple);
+    border: 2px solid var(--black);
+    color: var(--gray);
+    box-shadow: 2px 2px var(--east-bay);
 }
 
 p {
     text-align: center;
 }
 
+/* text field */
 input[type='text'] {
     width: 25rem;
     margin: 0 1rem;
@@ -86,12 +97,14 @@ input[type='text'] {
     font-size: 2rem;
 }
 
+/* form */
 form {
     margin-top: 1rem;
     display: flex;
     align-items: center;
 }
 
+/* showing and removing element from screen */
 .hidden {
     display: none;
 }
@@ -104,6 +117,7 @@ form {
     margin: 0 auto;
 }
 
+/* notification for result */
 .noti {
     width: 100%;
     margin: 2rem 0;
@@ -112,6 +126,7 @@ form {
     color: var(--east-bay);
 }
 
+/* css for scoreboard */
 #highscores {
     padding-top: 5rem;
     display: flex;
@@ -129,3 +144,6 @@ form {
     text-align: center;
 } 
 
+#scoreboard div {
+    color: var(--gray);
+}
