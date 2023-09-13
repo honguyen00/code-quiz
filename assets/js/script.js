@@ -51,7 +51,7 @@ const questionPool = [question1, question2, question3, question4, question5];
 
 // function for when the "start" button is clicked and begin game
 function startgame(event) {
-    time = 60;
+    time = 70;
     isIngame = true;
     mainSec.setAttribute("class", "hidden");
     renderQuestion(questionPool[currentQues]);
@@ -195,7 +195,7 @@ function storeScores() {
 
 // funtion for switching to scoreboard screen
 function showHighscores() {
-    window.location.href = 'highscore.html';
+    window.location.replace = 'highscore.html';
 }
 
 // event listener
