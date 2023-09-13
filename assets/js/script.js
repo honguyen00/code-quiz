@@ -195,7 +195,7 @@ function storeScores() {
 
 // funtion for switching to scoreboard screen
 function showHighscores() {
-    window.location.replace = 'highscore.html';
+    window.location.href = 'highscore.html';
 }
 
 // event listener
